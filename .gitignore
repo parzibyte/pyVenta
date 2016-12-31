@@ -45,3 +45,9 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#Carpetas de Python
+__pycache__/
+
+#Base de datos
+*.db
