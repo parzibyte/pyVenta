@@ -6,6 +6,23 @@ class BaseDeDatos:
 		self.nombre_base_de_datos = "pyVenta.db"
 		self.conexion = sqlite3.connect(self.nombre_base_de_datos)
 		self.cursor = self.conexion.cursor()
+		self.crear_tablas()
+
+	def crear_tablas(self):
+		tablas = [
+			"""
+			CREATE TABLE IF NOT EXISTS `productos`
+			(
+				codigo TEXT,
+				descripcion TEXT,
+				existencia REAL,
+				precio_de_compra REAL,
+				precio_de_venta REAL
+			);
+			"""
+		]
+		for tabla in tablas:
+			self.cursor.execute(tabla)
 
 	def guardar_cambios(self):
 		self.conexion.commit()
