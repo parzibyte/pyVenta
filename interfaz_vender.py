@@ -59,24 +59,28 @@ class interfaz_vender:
 	def limpiar_pantalla(self):
 			system('cls')
 
+	def aumentar_cantidad_de_producto(self, indice_del_producto):
+		self.carrito_de_compras[indice_del_producto][0] += 1
+		self.refrescar_datos()
+
+	def disminuir_cantidad_de_producto(self, indice_del_producto):
+		if self.carrito_de_compras[indice_del_producto][0] > 1:
+			self.carrito_de_compras[indice_del_producto][0] -= 1
+			self.refrescar_datos()
+
+	def agregar_producto_no_existente_al_carrito(self, nuevo_producto):
+		producto_convertido = list(nuevo_producto)
+		producto_convertido.insert(0,1)
+		self.carrito_de_compras.append(producto_convertido)
+		self.refrescar_datos()
+
 	def agregar_al_carrito(self, nuevo_producto):
 		rowid_nuevo_producto = nuevo_producto[-1]
-		encontrado = False
-		if self.numero_de_elementos_de_la_tabla > 0:
-			for producto in self.carrito_de_compras:
-				if producto[-1] == rowid_nuevo_producto:
-					producto[0] += 1
-					encontrado = True
-					break
-			if not encontrado:
-				producto_convertido = list(nuevo_producto)
-				producto_convertido.insert(0,1)
-				self.carrito_de_compras.append(producto_convertido)
-		else:
-			producto_convertido = list(nuevo_producto)
-			producto_convertido.insert(0,1)
-			self.carrito_de_compras.append(producto_convertido)
-		self.refrescar_datos()
+		for x in range(0, self.numero_de_elementos_de_la_tabla):
+			if self.carrito_de_compras[x][-1] == rowid_nuevo_producto:
+				self.aumentar_cantidad_de_producto(x)
+				return
+		self.agregar_producto_no_existente_al_carrito(nuevo_producto)
 
 	def imprimir_carrito_de_compras(self):
 		if self.numero_de_elementos_de_la_tabla > 0:
@@ -129,9 +133,9 @@ class interfaz_vender:
 			elif codigo_del_caracter_presionado == teclas.RETROCESO:
 				codigo_del_producto = codigo_del_producto[:-1]
 			elif codigo_del_caracter_presionado == teclas.SUMAR:
-				print("Agregar")
+				self.aumentar_cantidad_de_producto(self.indice_del_elemento_actualmente_seleccionado)
 			elif codigo_del_caracter_presionado == teclas.RESTAR:
-				print("Restar")
+				self.disminuir_cantidad_de_producto(self.indice_del_elemento_actualmente_seleccionado)
 			elif codigo_del_caracter_presionado == teclas.ALGUNA_TECLA_QUE_NO_ES_CARACTER:
 				codigo_tecla = ord(getch())
 				if codigo_tecla == teclas.FLECHA_ARRIBA:
