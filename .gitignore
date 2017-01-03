@@ -51,3 +51,6 @@ __pycache__/
 
 #Base de datos
 *.db
+
+#Mis pruebas
+pruebas.py

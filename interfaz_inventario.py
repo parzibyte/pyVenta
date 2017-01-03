@@ -1,11 +1,12 @@
-from Encabezado import BaseDeDatos, Teclas, Colores
 from msvcrt import getch
+from teclas import teclas
 from os import system
-class Inventario:
-
+from base_de_datos import base_de_datos
+from colores import colores
+class interfaz_inventario:
 
 	def __init__(self):
-		self.ayudante_base_de_datos = BaseDeDatos();
+		self.ayudante_base_de_datos = base_de_datos()
 		self.refrescar_datos()
 		self.SALIR = 0
 		self.ELIMINAR = 1
@@ -28,7 +29,7 @@ class Inventario:
 			self.ayudante_base_de_datos.nuevo("productos", datos_nuevo_producto)
 			print("Presione ENTER para agregar otro\nPresione ESC para volver al menú")
 			tecla_presionada = ord(getch())
-			if tecla_presionada == Teclas.ESC:
+			if tecla_presionada == teclas.ESC:
 				break
 		self.refrescar_datos()
 
@@ -38,7 +39,7 @@ class Inventario:
 		print("¿Realmente deseas eliminar {:s} con el código {:s}?".format(producto_seleccionado[1],producto_seleccionado[0]))
 		print("\tENTER: Confirmar\tESC: Cancelar")
 		teclaConfirmacion = ord(getch())
-		if teclaConfirmacion == Teclas.ENTER:
+		if teclaConfirmacion == teclas.ENTER:
 			self.ayudante_base_de_datos.eliminar("productos", "rowid", producto_seleccionado[5])
 			self.refrescar_datos()
 
@@ -46,28 +47,28 @@ class Inventario:
 	def confirmacion(self, mensaje):
 		print(mensaje + "\n")
 		teclaConfirmacion = ord(getch())
-		return teclaConfirmacion == Teclas.ENTER
+		return teclaConfirmacion == teclas.ENTER
 
 	def imprimir_opciones(self):
 		print("ESC: Volver al menú\tF1: Nuevo\tF2: Eliminar seleccionado")
 
 
 	def navegar_por_la_tabla(self, tecla_presionada):
-		if tecla_presionada == Teclas.ALGUNA_TECLA_QUE_NO_ES_CARACTER:
+		if tecla_presionada == teclas.ALGUNA_TECLA_QUE_NO_ES_CARACTER:
 			tecla_presionada = ord(getch())
-			if tecla_presionada == Teclas.FLECHA_ARRIBA:
+			if tecla_presionada == teclas.FLECHA_ARRIBA:
 				if self.indice_del_elemento_actualmente_seleccionado <= 0:
 					self.indice_del_elemento_actualmente_seleccionado = self.numero_de_elementos_de_la_tabla - 1
 				else:
 					self.indice_del_elemento_actualmente_seleccionado -= 1
-			if tecla_presionada == Teclas.FLECHA_ABAJO:
+			if tecla_presionada == teclas.FLECHA_ABAJO:
 				if self.indice_del_elemento_actualmente_seleccionado >= self.numero_de_elementos_de_la_tabla - 1:
 					self.indice_del_elemento_actualmente_seleccionado = 0
 				else:
 					self.indice_del_elemento_actualmente_seleccionado += 1
-			#if tecla_presionada == Teclas.FLECHA_DERECHA:
+			#if tecla_presionada == teclas.FLECHA_DERECHA:
 				#Código por aquí
-			#if tecla_presionada == Teclas.FLECHA_IZQUIERDA:
+			#if tecla_presionada == teclas.FLECHA_IZQUIERDA:
 				#Código por aquí
 				
 
@@ -87,7 +88,7 @@ class Inventario:
 		for codigo, descripcion, existencia, precio_compra, precio_venta, rowid in self.productos:
 			if contador == self.indice_del_elemento_actualmente_seleccionado:
 				# Imprimimos una flecha para que el usuario sepa en dónde está
-				print(Colores.AZUL + "|{: <20}|{:<30}|{:<15}|$ {:<15}|$ {:<15}|<==".format(codigo, descripcion, existencia, precio_compra, precio_venta) + Colores.FINAL)
+				print(colores.AZUL + "|{: <20}|{:<30}|{:<15}|$ {:<15}|$ {:<15}|<==".format(codigo, descripcion, existencia, precio_compra, precio_venta) + colores.FINAL)
 			else:
 				print("|{:<20}|{:<30}|{:<15}|$ {:<15}|$ {:<15}|".format(codigo, descripcion, existencia, precio_compra, precio_venta))
 			contador += 1
@@ -111,16 +112,12 @@ class Inventario:
 
 
 	def esperar_que_el_usuario_elija(self, tecla_presionada):
-		if tecla_presionada == Teclas.ESC:
+		if tecla_presionada == teclas.ESC:
 			return self.SALIR
-		elif tecla_presionada == Teclas.ALGUNA_TECLA_DE_FUNCION:
+		elif tecla_presionada == teclas.ALGUNA_TECLA_DE_FUNCION:
 			tecla_presionada = ord(getch())
-			if tecla_presionada == Teclas.F1:
+			if tecla_presionada == teclas.F1:
 				return self.NUEVO
-			if tecla_presionada == Teclas.F2:
+			if tecla_presionada == teclas.F2:
 				return self.ELIMINAR
 		return -1
-
-class Vender:
-	def mostrar(self):
-		input("Vender")
