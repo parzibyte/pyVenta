@@ -13,6 +13,7 @@ class interfaz_vender:
 	def imprimir_mensaje_codigo_inexistente(self):
 		print(colores.ERROR + "EL CÓDIGO NO EXISTE" + colores.FINAL)
 		getch()
+
 	def esperar_que_el_usuario_elija(self, tecla_presionada):
 		if tecla_presionada == teclas.ESC:
 			return self.SALIR
@@ -58,6 +59,10 @@ class interfaz_vender:
 
 	def limpiar_pantalla(self):
 			system('cls')
+	def quitar_producto(self, indice_del_producto):
+		if self.numero_de_elementos_de_la_tabla > 0:
+			del self.carrito_de_compras[indice_del_producto]
+			self.refrescar_datos()
 
 	def aumentar_cantidad_de_producto(self, indice_del_producto):
 		self.carrito_de_compras[indice_del_producto][0] += 1
@@ -143,11 +148,13 @@ class interfaz_vender:
 						self.indice_del_elemento_actualmente_seleccionado = self.numero_de_elementos_de_la_tabla - 1
 					else:
 						self.indice_del_elemento_actualmente_seleccionado -= 1
-				if codigo_tecla == teclas.FLECHA_ABAJO:
+				elif codigo_tecla == teclas.FLECHA_ABAJO:
 					if self.indice_del_elemento_actualmente_seleccionado >= self.numero_de_elementos_de_la_tabla - 1:
 						self.indice_del_elemento_actualmente_seleccionado = 0
 					else:
 						self.indice_del_elemento_actualmente_seleccionado += 1
+				elif codigo_tecla == teclas.SUPR:
+					self.quitar_producto(self.indice_del_elemento_actualmente_seleccionado)
 			else:
 				try:
 					codigo_del_producto += caracter_presionado.decode("utf-8")
